@@ -1,4 +1,4 @@
-# Sistema de Gerenciamento de Estoque Distribuído
+# Sistema de Gerenciamento de Estoque de Supermercado
 
 ## Objetivo
 
@@ -28,5 +28,5 @@ Este projeto visa a criação de um sistema de gerenciamento de estoque para uma
 Clone o repositório:
 
 ```bash
-git clone https://github.com/seu_usuario/seu_repositorio.git
+git clone https://github.com/emanuelpedrozo/mongo-shared-supermarket.git
 cd seu_repositorio
