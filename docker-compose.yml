@@ -1,50 +1,77 @@
 version: '3.8'
 
 services:
-  mongo1:
+  mongo-config01:
     image: mongo:latest
-    container_name: mongo1
-    ports:
-      - 27017:27017
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+    container_name: mongo-config01
+    networks:
+      - mongo-shard
+    command: mongod --configsvr --replSet configserver --port 27017
 
-  mongo2:
+  mongo-config02:
     image: mongo:latest
-    container_name: mongo2
-    ports:
-      - 27018:27017
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+    container_name: mongo-config02
+    networks:
+      - mongo-shard
+    command: mongod --configsvr --replSet configserver --port 27017
 
-  mongo3:
+  mongo-config03:
     image: mongo:latest
-    container_name: mongo3
-    ports:
-      - 27019:27017
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+    container_name: mongo-config03
+    networks:
+      - mongo-shard
+    command: mongod --configsvr --replSet configserver --port 27017
 
-  mongo-config:
+  mongo-shard1a:
     image: mongo:latest
-    container_name: mongo-config
-    command: mongod --configsvr --replSet configReplSet --port 27017
-    ports:
-      - 27020:27017
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+    container_name: mongo-shard1a
+    networks:
+      - mongo-shard
+    command: mongod --port 27018 --shardsvr --replSet shard01
+
+  mongo-shard1b:
+    image: mongo:latest
+    container_name: mongo-shard1b
+    networks:
+      - mongo-shard
+    command: mongod --port 27018 --shardsvr --replSet shard01
+
+  mongo-shard2a:
+    image: mongo:latest
+    container_name: mongo-shard2a
+    networks:
+      - mongo-shard
+    command: mongod --port 27019 --shardsvr --replSet shard02
+
+  mongo-shard2b:
+    image: mongo:latest
+    container_name: mongo-shard2b
+    networks:
+      - mongo-shard
+    command: mongod --port 27019 --shardsvr --replSet shard02
+
+  mongo-shard3a:
+    image: mongo:latest
+    container_name: mongo-shard3a
+    networks:
+      - mongo-shard
+    command: mongod --port 27020 --shardsvr --replSet shard03
+
+  mongo-shard3b:
+    image: mongo:latest
+    container_name: mongo-shard3b
+    networks:
+      - mongo-shard
+    command: mongod --port 27020 --shardsvr --replSet shard03
 
   mongo-router:
     image: mongo:latest
     container_name: mongo-router
-    command: mongos --configdb configReplSet/mongo-config:27017 --bind_ip_all
+    networks:
+      - mongo-shard
     ports:
-      - 27021:27017
+      - "27017:27017"
+    command: mongos --port 27017 --configdb configserver/mongo-config01:27017,mongo-config02:27017,mongo-config03:27017 --bind_ip_all
 
 networks:
-  default:
-    driver: bridge
+  mongo-shard:

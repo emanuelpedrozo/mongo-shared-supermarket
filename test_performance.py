@@ -17,7 +17,7 @@ def generate_data(n):
     return data
 
 def main():
-    client = MongoClient("mongodb://localhost:27021")
+    client = MongoClient("mongodb://localhost:27017")
     db = client.supermercado
     collection = db.produtos
 
