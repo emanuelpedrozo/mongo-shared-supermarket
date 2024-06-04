@@ -30,6 +30,7 @@ Clone o repositório:
 ```bash
 git clone https://github.com/emanuelpedrozo/mongo-shared-supermarket.git
 cd seu_repositorio
+```
 
 ### 3. Levantando os Contêineres Docker
 
