@@ -167,6 +167,8 @@ python test_performance.py
 
 O script test_performance.py exibirá o tempo necessário para inserção e consultas de dados, avaliando a eficácia da estratégia de particionamento.
 
+!https://github.com/emanuelpedrozo/mongo-shared-supermarket/blob/main/imagem_script_pyton.JPG
+
 
 
 
