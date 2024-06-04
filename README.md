@@ -25,6 +25,12 @@ Este projeto visa a criação de um sistema de gerenciamento de estoque para uma
 
 ### 2. Configuração do Ambiente
 
+Criação de uma rede para a comunicação entre os containers 
+
+```bash
+docker network create mongo-shard
+```
+
 Clone o repositório:
 
 ```bash
@@ -38,32 +44,115 @@ cd seu_repositorio
 docker-compose up -d
 ```
 
-### 4. Configuração de Sharding no MongoDB
+### 4. Configuração do mongo de um dos containers dos ConfigServes
 
 ```bash
-docker exec -it mongo-router bash
-```
-
-Dentro do contêiner, abra o shell do Mongo:
-
-```bash
-mongo
+docker exec -it mongo-config01 mongosh
 ```
 
 Execute o script de configuração de sharding no shell do Mongo:
 
 ```javascript
 
-sh.addShard("mongo1:27017")
-sh.addShard("mongo2:27017")
-sh.addShard("mongo3:27017")
-
-sh.enableSharding("supermercado")
-
-sh.shardCollection("supermercado.produtos", { "filial_id": 1 })
+rs.initiate(
+   {
+      _id: "configserver",
+      configsvr: true,
+      version: 1,
+      members: [
+         { _id: 0, host : "mongo-config01:27017" },
+         { _id: 1, host : "mongo-config02:27017" },
+         { _id: 2, host : "mongo-config03:27017" }
+      ]
+   }
+)
 ```
 
-### 5. Gerar Dados Simulados e Executar Testes de Desempenho
+### 5. Configuração de todos os shards
+
+Shard1
+
+```bash
+docker exec -it mongo-shard1a mongosh --port 27018
+```
+
+Execute o script de configuração de sharding no shell do Mongo:
+
+```javascript
+
+rs.initiate(
+   {
+      _id: "shard01",
+      version: 1,
+      members: [
+         { _id: 0, host : "mongo-shard1a:27018" },
+         { _id: 1, host : "mongo-shard1b:27018" },
+      ]
+   }
+)
+```
+
+Shard2
+
+```bash
+docker exec -it mongo-shard2a mongosh --port 27019
+```
+
+Execute o script de configuração de sharding no shell do Mongo:
+
+```javascript
+
+rs.initiate(
+   {
+      _id: "shard02",
+      version: 1,
+      members: [
+         { _id: 0, host : "mongo-shard2a:27019" },
+         { _id: 1, host : "mongo-shard2b:27019" },
+      ]
+   }
+)
+```
+
+Shard3
+
+```bash
+docker exec -it mongo-shard3a mongosh --port 27020
+```
+
+Execute o script de configuração de sharding no shell do Mongo:
+
+```javascript
+
+rs.initiate(
+   {
+      _id: "shard03",
+      version: 1,
+      members: [
+         { _id: 0, host : "mongo-shard3a:27020" },
+         { _id: 1, host : "mongo-shard3b:27020" },
+      ]
+   }
+)
+```
+
+### 6. Iniciar o serviço do roteador e configurar o roteador para que conheça os shards disponíveis.
+
+```bash
+docker run -p 27017:27017 --name mongo-router --net mongo-shard -d mongo mongos --port 27017 --configdb configserver/mongo-config01:27017,mongo-config02:27017,mongo-config03:27017 --bind_ip_all
+```
+
+```bash
+docker exec -it mongo-router mongo
+sh.addShard("shard01/mongo-shard1a:27018")
+sh.addShard("shard01/mongo-shard1b:27018") 
+sh.addShard("shard02/mongo-shard2a:27019")
+sh.addShard("shard02/mongo-shard2b:27019") 
+sh.addShard("shard03/mongo-shard3a:27020")
+sh.addShard("shard03/mongo-shard3b:27020")
+```
+
+### 7. Gerar Dados Simulados e Executar Testes de Desempenho
 
 Saia do contêiner do mongo-router e execute o script Python para gerar dados e realizar testes de desempenho:
 
@@ -74,6 +163,7 @@ python test_performance.py
 ### 6. Resultados
 
 O script test_performance.py exibirá o tempo necessário para inserção e consultas de dados, avaliando a eficácia da estratégia de particionamento.
+
 
 
 
