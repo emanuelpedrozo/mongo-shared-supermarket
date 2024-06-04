@@ -16,7 +16,7 @@ Este projeto visa a criação de um sistema de gerenciamento de estoque para uma
 - `mongo-config-server-cnfg.js`: SScript para configurar o servidor do Mongo.
 - `mongo-shard01-cnfg.js`: Script para configurar o shard1.
 - `mongo-shard02-cnfg.js`: Script para configurar o shard2.
-- `mongo-shard03-cnfg.js`: Script para configurar o shard3333.
+- `mongo-shard03-cnfg.js`: Script para configurar o shard3.
 - `test_performance.py`: Script em Python para gerar dados simulados, inserir dados e realizar consultas para testes de desempenho.
 
 ## Passo a Passo para Configuração e Execução
