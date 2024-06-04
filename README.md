@@ -30,3 +30,38 @@ Clone o repositório:
 ```bash
 git clone https://github.com/emanuelpedrozo/mongo-shared-supermarket.git
 cd seu_repositorio
+
+### 3. Levantando os Contêineres Docker
+
+```bash
+docker-compose up -d
+
+### 4. Configuração de Sharding no MongoDB
+
+```bash
+docker exec -it mongo-router bash
+
+Dentro do contêiner, abra o shell do Mongo:
+
+```bash
+
+mongo
+
+Execute o script de configuração de sharding no shell do Mongo:
+
+```javascript
+
+sh.addShard("mongo1:27017")
+sh.addShard("mongo2:27017")
+sh.addShard("mongo3:27017")
+
+sh.enableSharding("supermercado")
+
+sh.shardCollection("supermercado.produtos", { "filial_id": 1 })
+
+
+
+
+
+
+
