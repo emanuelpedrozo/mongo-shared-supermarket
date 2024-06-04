@@ -13,7 +13,10 @@ Este projeto visa a criação de um sistema de gerenciamento de estoque para uma
 ## Estrutura do Projeto
 
 - `docker-compose.yml`: Arquivo de configuração do Docker Compose para montar o ambiente distribuído do MongoDB.
-- `setup_sharding.js`: Script para configurar a fragmentação no MongoDB.
+- `mongo-config-server-cnfg.js`: SScript para configurar o servidor do Mongo.
+- `mongo-shard01-cnfg.js`: Script para configurar o shard1.
+- `mongo-shard02-cnfg.js`: Script para configurar o shard2.
+- `mongo-shard03-cnfg.js`: Script para configurar o shard3333.
 - `test_performance.py`: Script em Python para gerar dados simulados, inserir dados e realizar consultas para testes de desempenho.
 
 ## Passo a Passo para Configuração e Execução
