@@ -63,6 +63,18 @@ sh.enableSharding("supermercado")
 sh.shardCollection("supermercado.produtos", { "filial_id": 1 })
 ```
 
+### 5. Gerar Dados Simulados e Executar Testes de Desempenho
+
+Saia do contêiner do mongo-router e execute o script Python para gerar dados e realizar testes de desempenho:
+
+```bash
+python test_performance.py
+```
+
+### 6. Resultados
+
+O script test_performance.py exibirá o tempo necessário para inserção e consultas de dados, avaliando a eficácia da estratégia de particionamento.
+
 
 
 
