@@ -35,17 +35,19 @@ cd seu_repositorio
 
 ```bash
 docker-compose up -d
+```
 
 ### 4. Configuração de Sharding no MongoDB
 
 ```bash
 docker exec -it mongo-router bash
+```
 
 Dentro do contêiner, abra o shell do Mongo:
 
 ```bash
-
 mongo
+```
 
 Execute o script de configuração de sharding no shell do Mongo:
 
@@ -58,6 +60,7 @@ sh.addShard("mongo3:27017")
 sh.enableSharding("supermercado")
 
 sh.shardCollection("supermercado.produtos", { "filial_id": 1 })
+```
 
 
 
