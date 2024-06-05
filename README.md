@@ -141,9 +141,13 @@ rs.initiate(
 
 ### 6. Iniciar o serviço do roteador e configurar o roteador para que conheça os shards disponíveis.
 
+Iniciando o serviço do roteador
+
 ```bash
 docker run -p 27017:27017 --name mongo-router --net mongo-shard -d mongo mongos --port 27017 --configdb configserver/mongo-config01:27017,mongo-config02:27017,mongo-config03:27017 --bind_ip_all
 ```
+
+Configurando o roteador para que conheça os shards disponíveis.
 
 ```bash
 docker exec -it mongo-router mongo
